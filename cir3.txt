@@ -1,0 +1,10 @@
+# Circuit name: complex1
+INPUT in1
+INPUT in2
+MUL mul1 in1 in2
+ADD add1 mul1 in1
+REG reg1 add1
+MUL mul2 reg1 in2
+ADD add2 mul2 in1
+MUX mux1 add2 in2
+OUTPUT out1 mux1

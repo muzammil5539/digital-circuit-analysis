@@ -1,0 +1,6 @@
+# Circuit name: simple1
+INPUT in1
+INPUT in2
+ADD add1 in1 in2
+MUX mux1 add1 in2
+OUTPUT out1 mux1

@@ -1,0 +1,8 @@
+# Circuit name: multiplier1
+INPUT in1
+INPUT in2
+MUL mul1 in1 in2
+REG reg1 mul1
+ADD add1 reg1 in2
+MUX mux1 add1 in1
+OUTPUT out1 mux1
