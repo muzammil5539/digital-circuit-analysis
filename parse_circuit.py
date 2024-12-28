@@ -9,9 +9,13 @@ def parse_circuit(filename):
                 node_type = parts[0]
                 node_id = parts[1]
                 inputs = parts[2:]
+                # Handle expressions like a^3
+                processed_inputs = []
+                for input in inputs:
+                    processed_inputs.extend(process_expression(input))
                 circuit_graph[node_id] = {
                     'type': node_type,
-                    'inputs': inputs,
+                    'inputs': processed_inputs,
                     'delay': get_delay(node_type)
                 }
     except FileNotFoundError:
@@ -19,6 +23,13 @@ def parse_circuit(filename):
     except Exception as e:
         raise Exception(f"Error parsing {filename}: {e}")
     return circuit_graph
+
+def process_expression(expression):
+    if '^' in expression:
+        base, exponent = expression.split('^')
+        exponent = int(exponent)
+        return [f"{base}^{exponent}"]
+    return [expression]
 
 def get_delay(node_type):
     delays = {

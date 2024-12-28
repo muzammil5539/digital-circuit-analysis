@@ -1,8 +1,47 @@
-# Circuit name: multiplier1
-INPUT in1
-INPUT in2
-MUL mul1 in1 in2
-REG reg1 mul1
-ADD add1 reg1 in2
-MUX mux1 add1 in1
-OUTPUT out1 mux1
+# Circuit name: CIR_YAS3
+
+INPUT x[n]
+INPUT y[n-1] 
+
+MUL mul1 x[n]
+ADD add1 mul1 
+MUL mul2 add1
+ADD add2 mul2 
+
+MUL mul_feedback1 y[n-1]
+MUL mul_feedback2 mul_feedback1
+MUL mul_feedback3 mul_feedback2
+
+ADD add_final add2 mul_feedback3
+OUTPUT y[n] add_final
+
+MUL mul1_1 x[n]
+ADD add1_1 mul1_1 
+MUL mul2_1 add1_1
+ADD add2_1 mul2_1 
+MUL mul_feedback1_1 y[n-1]
+MUL mul_feedback2_1 mul_feedback1_1
+MUL mul_feedback3_1 mul_feedback2_1
+ADD add_final_1 add2_1 mul_feedback3_1
+OUTPUT y[n]_1 add_final_1
+
+MUL mul1_2 y[n]_1
+ADD add1_2 mul1_2 
+MUL mul2_2 add1_2
+ADD add2_2 mul2_2 
+MUL mul_feedback1_2 y[n-1]
+MUL mul_feedback2_2 mul_feedback1_2
+MUL mul_feedback3_2 mul_feedback2_2
+ADD add_final_2 add2_2 mul_feedback3_2
+OUTPUT y[n]_2 add_final_2
+
+
+MUL mul1_3 y[n]_2
+ADD add1_3 mul1_3 
+MUL mul2_3 add1_3
+ADD add2_3 mul2_3 
+MUL mul_feedback1_3 y[n-1]
+MUL mul_feedback2_3 mul_feedback1_3
+MUL mul_feedback3_3 mul_feedback2_3
+ADD add_final_3 add2_3 mul_feedback3_3
+OUTPUT y[n]_3 add_final_3

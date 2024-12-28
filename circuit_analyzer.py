@@ -24,9 +24,13 @@ class CircuitAnalyzer:
                     node_type = parts[0]
                     node_id = parts[1]
                     inputs = parts[2:]
+                    # Handle expressions like a^3
+                    processed_inputs = []
+                    for input in inputs:
+                        processed_inputs.extend(self.process_expression(input))
                     circuit_graph[node_id] = {
                         'type': node_type,
-                        'inputs': inputs,
+                        'inputs': processed_inputs,
                         'delay': self.get_delay(node_type)
                     }
         except FileNotFoundError:
@@ -34,6 +38,14 @@ class CircuitAnalyzer:
         except Exception as e:
             raise Exception(f"Error parsing {self.filename}: {e}")
         return circuit_graph
+
+    @staticmethod
+    def process_expression(expression):
+        if '^' in expression:
+            base, exponent = expression.split('^')
+            exponent = int(exponent)
+            return [f"{base}"] * exponent
+        return [expression]
 
     @staticmethod
     def get_delay(node_type):

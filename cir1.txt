@@ -1,9 +1,13 @@
-# Circuit name: adder1
-INPUT in1
-INPUT in2
-ADD add1 in1 in2
-MUL mul1 in1 add1
+# Circuit name: CIR_YAS2
+
+INPUT x[n]
+
+ADD add1 x[n] 
+MUL mul1 add1
 REG reg1 mul1
-ADD add2 reg1 in2
-MUX mux1 add2 in1
-OUTPUT out1 mux1
+ADD add2 reg1
+MUL mul2 add2 
+ADD add3 mul2 
+MUX mux1 add3 mul1 
+
+OUTPUT y[n] mux1
