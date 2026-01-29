@@ -1,18 +1,53 @@
+"""
+Digital Circuit Analyzer Module
+
+This module provides the CircuitAnalyzer class for parsing circuit description files,
+analyzing critical paths, and visualizing circuit graphs.
+"""
+
 import os
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
 class CircuitAnalyzer:
+    """
+    A class for analyzing digital circuits and identifying critical paths.
+    
+    This analyzer reads circuit descriptions from text files, constructs a graph
+    representation, and computes the critical path (longest delay path) through
+    the circuit.
+    
+    Attributes:
+        filename (str): Path to the circuit description file
+        circuit_graph (dict): Dictionary representation of the circuit graph
+    """
+    
     def __init__(self, filename):
+        """
+        Initialize the CircuitAnalyzer with a circuit description file.
+        
+        Args:
+            filename (str): Path to the circuit description text file
+        """
         self.filename = filename
         self.circuit_graph = self.parse_circuit()
 
     def parse_circuit(self):
         """
-        Parses the circuit description from a text file and constructs the graph.
-
+        Parse the circuit description from a text file and construct the graph.
+        
+        The circuit file should contain lines in the format:
+        <GATE_TYPE> <node_id> <input1> <input2> ...
+        
+        Comments start with '#' and blank lines are ignored.
+        
         Returns:
-            dict: The circuit graph.
+            dict: The circuit graph where keys are node IDs and values are dicts
+                  containing 'type', 'inputs', and 'delay' information
+                  
+        Raises:
+            Exception: If the file is not found or cannot be parsed
         """
         circuit_graph = {}
         try:
@@ -41,6 +76,15 @@ class CircuitAnalyzer:
 
     @staticmethod
     def process_expression(expression):
+        """
+        Process expressions like 'a^3' which means input 'a' repeated 3 times.
+        
+        Args:
+            expression (str): Input expression, possibly with exponent notation
+            
+        Returns:
+            list: List of expanded input names
+        """
         if '^' in expression:
             base, exponent = expression.split('^')
             exponent = int(exponent)
@@ -50,13 +94,20 @@ class CircuitAnalyzer:
     @staticmethod
     def get_delay(node_type):
         """
-        Returns the delay for a given component type.
+        Return the propagation delay for a given component type.
+        
+        Standard delays (in time units):
+        - ADD: 1.0 tu
+        - MUL: 1.0 tu
+        - REG: 0.2 tu
+        - MUX: 1.0 tu
+        - Others: 1.0 tu (default)
 
         Args:
-            node_type (str): The type of the component.
+            node_type (str): The type of the component (ADD, MUL, REG, MUX, etc.)
 
         Returns:
-            float: The delay of the component.
+            float: The propagation delay of the component in time units
         """
         delays = {
             'ADD': 1.0,
@@ -68,10 +119,21 @@ class CircuitAnalyzer:
 
     def find_critical_path(self):
         """
-        Finds the critical path in the circuit graph.
+        Find the critical path in the circuit graph using topological sorting
+        and dynamic programming.
+        
+        The critical path is the longest delay path from any input to any output,
+        which determines the minimum clock period for the circuit.
+        
+        Algorithm:
+        1. Perform DFS-based topological sort
+        2. Use dynamic programming to compute longest paths
+        3. Backtrack to reconstruct the critical path
 
         Returns:
-            tuple: A tuple containing the critical path (list of node IDs) and the total delay (float).
+            tuple: A tuple containing:
+                - critical_path (list): List of node IDs forming the critical path
+                - total_delay (float): Total delay along the critical path in time units
         """
         def dfs(node, visited, stack):
             visited.add(node)
@@ -116,10 +178,17 @@ class CircuitAnalyzer:
 
     def visualize_circuit(self, critical_path):
         """
-        Visualizes the circuit graph and highlights the critical path.
+        Visualize the circuit graph and highlight the critical path.
+        
+        Creates a directed graph visualization using NetworkX and Matplotlib,
+        with the critical path highlighted in red. The visualization is saved
+        to the output directory.
 
         Args:
-            critical_path (list): The critical path (list of node IDs).
+            critical_path (list): The critical path as a list of node IDs
+            
+        Side Effects:
+            Saves a PNG image to the output/ directory
         """
         G = nx.DiGraph()
         for node, data in self.circuit_graph.items():

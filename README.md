@@ -6,6 +6,8 @@
 
 A powerful Python-based tool for analyzing digital circuits to identify critical paths and calculate timing delays. This project helps determine the maximum operating frequency of both combinational and sequential circuits through graph-based analysis and visualization.
 
+> 🚀 **New to the project?** Check out the [Quick Start Guide](docs/QUICK_START.md) to get up and running in minutes!
+
 ## 📋 Table of Contents
 
 - [Features](#-features)
