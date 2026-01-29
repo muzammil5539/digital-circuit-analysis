@@ -1,10 +1,14 @@
+import os
 from circuit_analyzer import CircuitAnalyzer
 
 def main():
+    # Get the path to the examples directory
+    examples_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'examples')
     cir_names = ["cir1.txt", "cir2.txt", "cir3.txt", "cir4.txt", "cir5.txt"]
     for cur_circuit in cir_names:
+        circuit_path = os.path.join(examples_dir, cur_circuit)
         try:
-            analyzer = CircuitAnalyzer(cur_circuit)
+            analyzer = CircuitAnalyzer(circuit_path)
             critical_path, total_delay = analyzer.find_critical_path()
             print(f"\nCircuit name: {cur_circuit}")
             print(f"Critical Path: {' -> '.join(critical_path)}")
