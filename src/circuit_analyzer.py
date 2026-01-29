@@ -151,11 +151,13 @@ class CircuitAnalyzer:
         nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
         nx.draw_networkx_edges(G, pos, edgelist=[(critical_path[i], critical_path[i+1]) for i in range(len(critical_path)-1)], edge_color='r', width=2)
 
-        plt.title(f"Circuit Visualization with Critical Path: {self.filename}")
+        plt.title(f"Circuit Visualization with Critical Path: {os.path.basename(self.filename)}")
 
-        # Save the plot to the output folder
-        output_dir = "output"
+        # Save the plot to the output folder (relative to project root)
+        project_root = os.path.dirname(os.path.dirname(__file__))
+        output_dir = os.path.join(project_root, "output")
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        plt.savefig(os.path.join(output_dir, f"{self.filename.split('.')[0]}.png"))
+        circuit_name = os.path.basename(self.filename).split('.')[0]
+        plt.savefig(os.path.join(output_dir, f"{circuit_name}.png"))
         plt.close()
