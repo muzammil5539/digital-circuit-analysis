@@ -1,10 +1,31 @@
+"""
+Digital Circuit Analysis - Main Entry Point
+
+This script analyzes all example circuit files and generates critical path
+reports and visualizations.
+
+Usage:
+    python src/main.py
+"""
+
 import os
 from circuit_analyzer import CircuitAnalyzer
 
+
 def main():
+    """
+    Analyze all example circuits and generate reports.
+    
+    This function:
+    1. Loads circuit files from the examples directory
+    2. Analyzes each circuit to find its critical path
+    3. Prints detailed component and path information
+    4. Generates visual circuit diagrams with highlighted critical paths
+    """
     # Get the path to the examples directory
     examples_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'examples')
     cir_names = ["cir1.txt", "cir2.txt", "cir3.txt", "cir4.txt", "cir5.txt"]
+    
     for cur_circuit in cir_names:
         circuit_path = os.path.join(examples_dir, cur_circuit)
         try:
